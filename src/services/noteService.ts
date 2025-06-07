@@ -20,12 +20,12 @@ export interface FetchNotesParams {
 
 export const fetchNotes = async (params: FetchNotesParams = {}): Promise<NotesResponse> => {
   const { page = 1, perPage = 12, search } = params;
-  
+
   const queryParams = new URLSearchParams({
     page: page.toString(),
     perPage: perPage.toString(),
   });
-  
+
   if (search && search.trim()) {
     queryParams.append('search', search.trim());
   }

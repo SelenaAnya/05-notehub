@@ -13,7 +13,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onSearch }) => {
     (value: string) => {
       onSearch(value);
     },
-    500
+    800
   );
 
   useEffect(() => {
