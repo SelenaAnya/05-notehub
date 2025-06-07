@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import NoteForm from '../NoteForm/NoteForm';
-import { CreateNoteRequest } from '../../types/note';
+import type { CreateNoteRequest } from '../../types/note';
 import css from './NoteModal.module.css';
 
 interface NoteModalProps {
