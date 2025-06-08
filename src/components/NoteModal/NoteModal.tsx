@@ -1,16 +1,27 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createNote } from '../../services/noteService';
+import type { CreateNoteRequest } from '../../services/noteService';
 import NoteForm from '../NoteForm/NoteForm';
-import type { CreateNoteRequest } from '../../types/note';
 import css from './NoteModal.module.css';
 
 interface NoteModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (values: CreateNoteRequest) => void;
 }
 
-const NoteModal: React.FC<NoteModalProps> = ({ isOpen, onClose, onSubmit }) => {
+const NoteModal: React.FC<NoteModalProps> = ({ isOpen, onClose }) => {
+  const queryClient = useQueryClient();
+
+  const createNoteMutation = useMutation({
+    mutationFn: createNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      onClose();
+    },
+  });
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -35,6 +46,10 @@ const NoteModal: React.FC<NoteModalProps> = ({ isOpen, onClose, onSubmit }) => {
     }
   };
 
+  const handleSubmit = (values: CreateNoteRequest) => {
+    createNoteMutation.mutate(values);
+  };
+
   if (!isOpen) {
     return null;
   }
@@ -47,7 +62,11 @@ const NoteModal: React.FC<NoteModalProps> = ({ isOpen, onClose, onSubmit }) => {
       onClick={handleBackdropClick}
     >
       <div className={css.modal}>
-        <NoteForm onSubmit={onSubmit} onCancel={onClose} />
+        <NoteForm
+          onSubmit={handleSubmit}
+          onCancel={onClose}
+          isLoading={createNoteMutation.isLoading}
+        />
       </div>
     </div>,
     document.body
