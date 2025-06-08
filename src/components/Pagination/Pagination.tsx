@@ -1,7 +1,7 @@
-import ReactPaginate, { ReactPaginateProps } from 'react-paginate';
+import ReactPaginate, { type ReactPaginateProps } from 'react-paginate';
 import css from './Pagination.module.css';
 
-interface PaginationProps extends Partial<ReactPaginateProps> {
+interface PaginationProps extends Omit<Partial<ReactPaginateProps>, 'onPageChange'> {
   totalPages: number;
   currentPage: number;
   onPageChange: (selectedPage: number) => void;

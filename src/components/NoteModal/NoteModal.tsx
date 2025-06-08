@@ -1,8 +1,5 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createNote } from '../../services/noteService';
-import type { CreateNoteRequest } from '../../services/noteService';
 import NoteForm from '../NoteForm/NoteForm';
 import css from './NoteModal.module.css';
 
@@ -12,16 +9,6 @@ interface NoteModalProps {
 }
 
 const NoteModal: React.FC<NoteModalProps> = ({ isOpen, onClose }) => {
-  const queryClient = useQueryClient();
-
-  const createNoteMutation = useMutation({
-    mutationFn: createNote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
-      onClose();
-    },
-  });
-
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -46,10 +33,6 @@ const NoteModal: React.FC<NoteModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleSubmit = (values: CreateNoteRequest) => {
-    createNoteMutation.mutate(values);
-  };
-
   if (!isOpen) {
     return null;
   }
@@ -63,9 +46,7 @@ const NoteModal: React.FC<NoteModalProps> = ({ isOpen, onClose }) => {
     >
       <div className={css.modal}>
         <NoteForm
-          onSubmit={handleSubmit}
           onCancel={onClose}
-          isLoading={createNoteMutation.isLoading}
         />
       </div>
     </div>,

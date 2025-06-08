@@ -95,9 +95,9 @@ const NoteForm: React.FC<NoteFormProps> = ({ onCancel }) => {
             <button
               type="submit"
               className={css.submitButton}
-              disabled={isSubmitting || !isValid || !dirty || createNoteMutation.isLoading}
+              disabled={isSubmitting || !isValid || !dirty || createNoteMutation.isPending}
             >
-              {createNoteMutation.isLoading ? 'Creating...' : 'Create note'}
+              {createNoteMutation.isPending ? 'Creating...' : 'Create note'}
             </button>
           </div>
         </Form>

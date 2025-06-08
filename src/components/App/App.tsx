@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
 import { fetchNotes } from '../../services/noteService';
 import NoteList from '../NoteList/NoteList';
@@ -13,7 +13,6 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [debouncedSearchQuery] = useDebounce(searchQuery, 800);
-  const queryClient = useQueryClient();
 
   const {
     data: notesData,
@@ -28,8 +27,7 @@ const App: React.FC = () => {
         search: debouncedSearchQuery,
       }),
     staleTime: 5 * 60 * 1000,
-    keepPreviousData: true,
-    placeholderData: () => queryClient.getQueryData(['notes', currentPage - 1, debouncedSearchQuery]),
+    placeholderData: (previousData) => previousData,
   });
 
   const handlePageChange = (page: number) => {
