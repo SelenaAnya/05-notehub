@@ -63,7 +63,6 @@ const App: React.FC = () => {
       <header className={css.toolbar}>
         <SearchBox
           value={searchQuery}
-          onChange={setSearchQuery}
           onSearch={handleSearch}
         />
         {totalPages > 1 && (
